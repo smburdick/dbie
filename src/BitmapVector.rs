@@ -10,17 +10,11 @@ impl BitmapVector {
     }
 }
 
-
-
-/**
- *
-
- */
 trait AlgorithmicBitmapVector {
-    //fn new
+    fn new_from_uncompressed(vector: BitmapVector) -> Self;
     fn and(&self, other: &Self) -> Self;
     //fn or(&self, other: &BitmapVector) -> BitmapVector;
-    //fn compress(&self);
+    //fn clone(&self) -> Self;
 }
 
 struct WAHVector {
@@ -28,6 +22,10 @@ struct WAHVector {
 }
 
 impl AlgorithmicBitmapVector for WAHVector {
+    fn new_from_uncompressed(vector: BitmapVector) -> WAHVector {
+        // TODO compress vector
+        return WAHVector { value: vector };
+    }
     fn and(&self, other: &WAHVector) -> WAHVector {
         return WAHVector { value: self.value.clone() }; // TODO
     }
