@@ -6,3 +6,5 @@ authors = ["Sam Burdick <16883876+smburdick@users.noreply.github.com>"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+sha1 = "0.6.0"
+# tarpc = "0.18.0"
