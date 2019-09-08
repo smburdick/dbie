@@ -7,11 +7,11 @@ pub mod sys_map {
     use sys_core_t::{VecIdT, ReplFactorT, HashKeyT, IpAddrT, NodeIdT};
     use super::sha1::Sha1;
 
-    trait DBIENode {
-        fn name(&self) -> &str;
-        fn id(&self) -> &NodeIdT;
-        fn hashed_id(&self) -> &HashKeyT;
-        fn ip_addr(&self) -> &IpAddrT;
+    pub trait DBIENode {
+        fn name(&self) -> String;
+        fn id(&self) -> NodeIdT;
+        fn hashed_id(&self) -> HashKeyT;
+        fn ip_addr(&self) -> IpAddrT;
     }
 
     pub struct AVLNode {
@@ -26,10 +26,10 @@ pub mod sys_map {
     }
 
     impl DBIENode for AVLNode {
-        fn id(&self) -> &NodeIdT { return &self.id; }
-        fn ip_addr(&self) -> &IpAddrT { return &self.ip_addr; }
-        fn name(&self) -> &str { return &self.name; }
-        fn hashed_id(&self) -> &HashKeyT { return &self.hashed_id; }
+        fn id(&self) -> NodeIdT { NodeIdT::from(self.id) }
+        fn ip_addr(&self) -> IpAddrT { IpAddrT::from(self.ip_addr.clone()) }
+        fn name(&self) -> String { String::from(self.name.clone()) }
+        fn hashed_id(&self) -> HashKeyT { HashKeyT::from(self.hashed_id) }
     }
 
     // TODO understand generics syntax
@@ -52,7 +52,7 @@ pub mod sys_map {
                 //let root = self.root.get_or_insert
                 // TODO insert the node
             } else {
-                let id = *value.id();
+                let id = value.id();
                 self.root = Some(AVLNode {
                     id: id,
                     hashed_id: vec_id_hash(id),
@@ -63,8 +63,9 @@ pub mod sys_map {
         }
     }
 
+    // ideally these should be private (were made public just for testing..)
     pub fn str_hash(key: &str) -> HashKeyT {
-        let hasher = Sha1::from(&key.to_string());
+        let hasher = Sha1::from(key);
         let digest = &hasher.digest().to_string()[0..16];
         let mut res = u64::from_str_radix(&digest, 16).ok();
         return *res.get_or_insert(0); // if hashing fails, returns 0

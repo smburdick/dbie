@@ -1,26 +1,24 @@
 
 pub mod bitmap_vector {
     use std::mem;
-    use crate::sys_core_t::Word;
+    use crate::sys_core_t::{Word, VecIdT};
 
     fn word_len() -> usize {
         return mem::size_of::<Word>() * 8;
     }
 
-    trait BitmapVector {
-        fn from_uncompressed(vector: Vec<Word>) -> Self;
+    pub trait BitmapVector {
+        fn from_uncompressed(vector: Vec<Word>, id: VecIdT) -> Self; // should vector take ownership of value reference?
         fn and(&self, other: &Self) -> Self;
         fn or(&self, other: &Self) -> Self;
-        fn value(&self) -> &Vec<Word>;
+        //fn value(&self) -> &Vec<Word>; // TODO consider changing to array
+        fn id(&self) -> VecIdT;
         fn clone(&self) -> Self;
     }
 
-    // struct WAHMetadata {
-    //
-    // }
-
-    struct WAHVector {
-        value: Vec<Word> // TODO convert to an array?
+    pub struct WAHVector {
+        value: Vec<Word>, // TODO convert to an array somehow...?
+        id: VecIdT
         // TODO documentation on vectors
         // /**
         //
@@ -36,27 +34,33 @@ pub mod bitmap_vector {
 
     impl BitmapVector for WAHVector {
 
-        fn from_uncompressed(vector: Vec<Word>) -> WAHVector {
+        fn from_uncompressed(vector: Vec<Word>, id: VecIdT) -> WAHVector {
             // TODO compress vector
-            return WAHVector { value: vector };
+            return WAHVector {
+                value: vector,
+                id: id
+            };
         }
 
         // TODO generic binary 'op' function
 
         fn and(&self, other: &WAHVector) -> WAHVector {
-            return WAHVector { value: self.value.clone() }; // TODO
+            return self.clone(); // TODO
         }
 
         fn or(&self, other: &WAHVector) -> WAHVector {
-            return WAHVector { value: self.value.clone() }; // TODO
+            return self.clone(); // TODO
         }
 
-        fn value(&self) -> &Vec<Word> {
-            return &self.value;
+        fn id(&self) -> VecIdT {
+            return VecIdT::from(self.id);
         }
 
         fn clone(&self) -> WAHVector {
-            return WAHVector { value: self.value.clone() };
+            return WAHVector {
+                value: self.value.clone(), // TODO use from instead
+                id: self.id
+            };
         }
     }
 }

@@ -1,6 +1,7 @@
 mod bitmap_vector;
 mod sys_map;
 mod sys_core_t;
+mod master;
 
 mod tst {
     use super::sys_map::sys_map;

@@ -7,4 +7,4 @@ authors = ["Sam Burdick <16883876+smburdick@users.noreply.github.com>"]
 
 [dependencies]
 sha1 = "0.6.0"
-# tarpc = "0.18.0"
+grpcio = "0.4" # make sure you have the pre-reqs from their readme!
